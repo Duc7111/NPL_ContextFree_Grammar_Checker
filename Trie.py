@@ -33,3 +33,4 @@ class Trie:
 
         for word, val in dictionary.items():
             self.__iadd__(word, val)
+

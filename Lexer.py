@@ -1,25 +1,29 @@
 
-from Trie import Trie
-
-class Lexer:
+class EnglishLexer:
     def __init__(self, dir: str) -> None:
-        self.trie = Trie()
-        self.trie.load(dir)
+        self.dict = {}
+        
+    # Build for oxford 3000 only since this dictionary only contains: 
+    ## [A-z]*
+    ## [A-z]* to
+    def tokenize(self, string: str) -> list:
+        tokens = string.split(' ')
+        for i in range(0, len(tokens)):
+            if tokens[i] == 'to':
+                comToken = tokens[i - 1] + ' ' + tokens[i]
+                if comToken in self.dict:
+                    tokens[i - 1] = comToken
+                    tokens.pop(i)
+        return tokens
 
-    def tokenize(self, string: str) -> []:
-        tokens = []
-        cur: Trie
-        s = 0
-        n = len(string)
-        while s < n:
-            cur = self.trie
-            e = None
-            for i in range(s, n):
-                if cur.childs[string[i]] is None: 
-                    break
-                cur = cur.childs[string[i]]
-                if cur.val is not None:
-                    e = i
-            if e is not None:
-                tokens.append(str[s:e])
-            else 
+    # Lexical checker as well as part of speech tagger
+    def getPos(self, tokens: list) -> None | list: # None if any of the givens tokens is out of dictionary
+        pos = []
+        for token in tokens:
+            if token in self.dict:
+                pos.append(self.dict[token])
+            else:
+                return None
+        return pos
+    
+    
